@@ -132,6 +132,7 @@ class TokenDatabase(metaclass=abc.ABCMeta):
         # Ignore extra keys for now
         # Extra keys are for multi-modal inputs and
         # request specific metadata (e.g., LoRA ID).
+        logger.debug(self.hash_func.__name__)
         return self.hash_func((prefix_hash, tokens_tuple, extra_keys))
 
 
@@ -200,8 +201,10 @@ class ChunkedTokenDatabase(TokenDatabase):
         token_chunks: Iterable[Union[torch.Tensor, List[int]]],
     ) -> Iterable[int]:
         prefix_hash = self._get_init_hash()
+        logger.debug(f"init prefix_hash: {prefix_hash}")
         for token_chunk in token_chunks:
             prefix_hash = self._hash_tokens(token_chunk, prefix_hash)
+            logger.debug(f"prefix_hash: {prefix_hash}")
             yield prefix_hash
 
     @_lmcache_nvtx_annotate
