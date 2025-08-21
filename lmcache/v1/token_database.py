@@ -132,7 +132,10 @@ class TokenDatabase(metaclass=abc.ABCMeta):
         # Ignore extra keys for now
         # Extra keys are for multi-modal inputs and
         # request specific metadata (e.g., LoRA ID).
-        logger.debug(self.hash_func.__name__)
+        logger.debug("tokens_tuple:")
+        logger.debug(tokens_tuple)
+        logger.debug("extra_keys:")
+        logger.debug(extra_keys)
         return self.hash_func((prefix_hash, tokens_tuple, extra_keys))
 
 
