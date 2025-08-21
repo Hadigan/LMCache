@@ -87,6 +87,8 @@ class LMCacheLookupClient(LookupClientInterface):
             resp = self.sockets[i].recv()
             result = int.from_bytes(resp, "big")
             results.append(result)
+        logger.debug("Lookup client result: ")
+        logger.debug(results)
 
         if not all(x == results[0] for x in results):
             raise RuntimeError(

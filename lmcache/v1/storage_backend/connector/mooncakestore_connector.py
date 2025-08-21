@@ -154,7 +154,9 @@ class MooncakestoreConnector(RemoteConnector):
         self.local_cpu_backend = local_cpu_backend
 
     async def exists(self, key: CacheEngineKey) -> bool:
-        return self.store.is_exist(key.to_string())
+        result = self.store.is_exist(key.to_string())
+        logger.debug(f"Checking if key {key} exists: {result}")
+        return result
 
     def exists_sync(self, key: CacheEngineKey) -> bool:
         return self.store.is_exist(key.to_string())
