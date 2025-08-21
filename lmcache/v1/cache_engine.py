@@ -432,16 +432,18 @@ class LMCacheEngine:
         Block until all asynchronous store operations are completed
         """
         try:
+            logger.debug("Waiting for store operations to complete")
             start_time = time.time()
             for future in self.store_futures:
                 if timeout is not None:
                     elapsed = time.time() - start_time
                     remaining = max(0, timeout - elapsed)
-                    if remaining == 0:
+                    if elapsed >= timeout:
                         raise asyncio.TimeoutError("Timeout waiting for store operations to complete")
                     future.result(timeout=remaining)
                 else:
-                    future.result(timeout=None)
+                    future.result()
+            logger.debug("Done all store operations, Used {}ms".format((time.time() - start_time)) * 1000)
         except asyncio.TimeoutError:
             logger.error(f"Timeout waiting for store operations to complete")
         except Exception as e:
