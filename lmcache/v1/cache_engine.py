@@ -710,12 +710,16 @@ class LMCacheEngine:
             search_p2p = self.enable_p2p and (
                 search_range is None or "p2p" in search_range
             )
-
+            logger.debug("Lookup engine: lookup tokens: ")
+            logger.debug(tokens)
+            logger.debug("Lookup engine: tags: ")
+            logger.debug(tags if tags is not None else "None")
             for start, end, key in self.token_database.process_tokens(
                 tokens=tokens, tags=tags
             ):
+                
                 assert isinstance(key, CacheEngineKey)
-
+                logger.debug(f"Lookup engine: start: {start}, end: {end}, key: {key}")
                 if self.use_layerwise:
                     # TODO(Jiayi): Optimize by checking only the existence of the key
                     # of one layer
