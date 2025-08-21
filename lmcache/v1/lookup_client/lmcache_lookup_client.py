@@ -68,6 +68,11 @@ class LMCacheLookupClient(LookupClientInterface):
         lookup_id: Optional[str] = None,
         tags: OrderedDict = None,
     ) -> int:
+        logger.debug("Lookup client: lookup token_ids: ")
+        logger.debug(token_ids)
+        logger.debug("Lookup client: tags: ")
+        logger.debug(tags if tags is not None else "None")
+
         token_bufs = self.encoder.encode(token_ids)
         lookup_id_buf = lookup_id.encode("utf-8")
         tags_str = ""
