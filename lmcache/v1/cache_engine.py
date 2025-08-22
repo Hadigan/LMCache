@@ -445,7 +445,7 @@ class LMCacheEngine:
                     future.result()
             logger.debug("Finished all store operations, Used {:.3f}ms".format((time.time() - start_time)*1000))
         except asyncio.TimeoutError:
-            logger.error(f"Timeout waiting for store operations to complete")
+            logger.error("Timeout waiting for store operations to complete")
         except Exception as e:
             logger.error(f"Error waiting for store: {e}")
         finally:
