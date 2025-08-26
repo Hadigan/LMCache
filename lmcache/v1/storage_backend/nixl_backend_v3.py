@@ -198,6 +198,8 @@ class NixlBackend(StorageBackendInterface):
         with self._data_lock:
             if mem_obj := self._data.get(key, None):
                 if mem_obj.get_ref_count() == 1:
+                    logger.info("Freeing memory object")
+                    self.memory_allocator.free(mem_obj)
                     del self._data[key]
                 return True
             return False
