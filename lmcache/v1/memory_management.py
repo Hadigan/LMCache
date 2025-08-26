@@ -757,6 +757,13 @@ class TensorMemoryAllocator(MemoryAllocatorInterface):
         self.stats_monitor.update_active_memory_objs_count(self.num_active_allocations)
 
         # Allocate the block
+        shape_size = math.prod(shape) * dtype.itemsize
+        if shape_size < aligned_size:
+            logger.error(f"Allocate buffer size: {aligned_size}")
+            logger.error(f"dtype: {dtype}")
+            logger.error(f"shape_Size: {shape_size}")
+            logger.error(f"aligned bytes: {align_bytes}")
+        
         return TensorMemoryObj(
             raw_data=self.buffer[block.start : block.start + aligned_size],
             metadata=MemoryObjMetadata(
