@@ -758,6 +758,10 @@ class TensorMemoryAllocator(MemoryAllocatorInterface):
 
         # Allocate the block
         shape_size = math.prod(shape) * dtype.itemsize
+        logger.debug(f"Allocate buffer size: {aligned_size}")
+        logger.debug(f"dtype: {dtype}")
+        logger.debug(f"shape_Size: {shape_size}")
+        logger.debug(f"aligned bytes: {align_bytes}")
         if shape_size < aligned_size:
             logger.error(f"Allocate buffer size: {aligned_size}")
             logger.error(f"dtype: {dtype}")
