@@ -397,6 +397,10 @@ class TensorMemoryObj(MemoryObj):
             return None
         assert self.meta.dtype is not None
         # TODO(Jiayi): consider caching the `get_size()`
+        logger.debug(f"TensorMemoryObj.tensor.size: {self.get_size()}")
+        logger.debug(f"TensorMemoryObj.tensor.physize: {self.get_physical_size()}")
+        logger.debug(f"TensorMemoryObj.meta.dtype: {self.meta.dtype}")
+        logger.debug(f"TensorMemoryObj.meta.shape: {self.meta.shape}")
         return (
             self.raw_data[: self.get_size()].view(self.meta.dtype).view(self.meta.shape)
         )
