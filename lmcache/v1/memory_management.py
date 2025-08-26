@@ -758,7 +758,7 @@ class TensorMemoryAllocator(MemoryAllocatorInterface):
 
         # Allocate the block
         return TensorMemoryObj(
-            raw_data=self.buffer[block.start : block.start + raw_size],
+            raw_data=self.buffer[block.start : block.start + aligned_size],
             metadata=MemoryObjMetadata(
                 shape, dtype, block.start, aligned_size, 1, False, fmt
             ),
