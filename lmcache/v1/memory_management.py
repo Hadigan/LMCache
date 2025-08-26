@@ -1081,6 +1081,9 @@ class PagedTensorMemoryAllocator(MemoryAllocatorInterface):
         if shape != self.shape:
             size_in_bytes = shape.numel() * self.bytes_per_element
             free_block.raw_data = free_block.raw_data[:size_in_bytes]
+            logger.debug(
+                f"Resizing free block shape from {self.shape} to {shape} | size from {free_block.raw_data.numel()} to {size_in_bytes}"
+            )
 
         # TODO (Jiayi): need a flag to drop these debug ops
         # NOTE (Jiayi): the following code is not thread-safe but
