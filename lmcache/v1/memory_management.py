@@ -401,9 +401,15 @@ class TensorMemoryObj(MemoryObj):
         logger.debug(f"TensorMemoryObj.tensor.physize: {self.get_physical_size()}")
         logger.debug(f"TensorMemoryObj.meta.dtype: {self.meta.dtype}")
         logger.debug(f"TensorMemoryObj.meta.shape: {self.meta.shape}")
-        return (
-            self.raw_data[: self.get_size()].view(self.meta.dtype).view(self.meta.shape)
-        )
+        try:
+            result = self.raw_data[: self.get_size()].view(self.meta.dtype).view(self.meta.shape)
+            return result
+        except Exception as e:
+            logger.error(f"Error in TensorMemoryObj.get_tensor: {e}")
+            return torch.empty(0)
+        # return (
+        #     self.raw_data[: self.get_size()].view(self.meta.dtype).view(self.meta.shape)
+        # )
 
     @property
     def byte_array(self) -> bytes:
