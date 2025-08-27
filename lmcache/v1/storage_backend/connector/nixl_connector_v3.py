@@ -28,6 +28,7 @@ from lmcache.v1.memory_management import (
 )
 from lmcache.v1.storage_backend.abstract_backend import StorageBackendInterface
 from lmcache.v1.storage_backend.connector.nixl_utils import NixlConfigXpYd, NixlRole
+from lmcache.v1.memory_management import TensorMemoryObj
 
 if TYPE_CHECKING:
     # Third Party
@@ -584,7 +585,10 @@ class NixlReceiver:
                 mem_obj = self._backend.allocate(torch.Size(shape), dtype, fmt)
 
             alloc_indexes.append(mem_obj.meta.address)
-
+            
+            tmp_mem_obj: TensorMemoryObj = mem_obj
+            logger.debug(f"Allocate and put tensor size: {tmp_mem_obj.raw_data.numel()*tmp_mem_obj.raw_data.element_size()}")
+            logger.debug(f"Allocate and put addr: {tmp_mem_obj.metadata.address}")
             self._backend.put(key, mem_obj)
 
         return NixlAllocResponse(

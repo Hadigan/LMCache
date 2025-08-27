@@ -397,15 +397,19 @@ class TensorMemoryObj(MemoryObj):
             return None
         assert self.meta.dtype is not None
         # TODO(Jiayi): consider caching the `get_size()`
-        logger.debug(f"TensorMemoryObj.tensor.size: {self.get_size()}")
-        logger.debug(f"TensorMemoryObj.tensor.physize: {self.get_physical_size()}")
-        logger.debug(f"TensorMemoryObj.meta.dtype: {self.meta.dtype}")
-        logger.debug(f"TensorMemoryObj.meta.shape: {self.meta.shape}")
+
         try:
             result = self.raw_data[: self.get_size()].view(self.meta.dtype).view(self.meta.shape)
             return result
         except Exception as e:
             logger.error(f"Error in TensorMemoryObj.get_tensor: {e}")
+            logger.error(f"TensorMemoryObj.tensor.size from meta: {self.get_size()}")
+            logger.error(f"TensorMemoryObj.tensor.size from tensor: {self.raw_data.numels() * self.raw_data.element_size()}")
+            logger.error(f"TensorMemoryObj.tensor.physize: {self.get_physical_size()}")
+            logger.error(f"TensorMemoryObj.meta.dtype: {self.meta.dtype}")
+            logger.error(f"TensorMemoryObj.meta.shape: {self.meta.shape}")
+            logger.error(f"TensorMemoryObj.meta.fmt: {self.meta.fmt}")
+            logger.error(f"TensorMemoryObj.meta.addr: {self.meta.address}")
             return torch.empty(0)
         # return (
         #     self.raw_data[: self.get_size()].view(self.meta.dtype).view(self.meta.shape)
