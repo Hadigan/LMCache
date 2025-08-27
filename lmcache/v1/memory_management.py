@@ -404,7 +404,7 @@ class TensorMemoryObj(MemoryObj):
         except Exception as e:
             logger.error(f"Error in TensorMemoryObj.get_tensor: {e}")
             logger.error(f"TensorMemoryObj.tensor.size from meta: {self.get_size()}")
-            logger.error(f"TensorMemoryObj.tensor.size from tensor: {self.raw_data.numels() * self.raw_data.element_size()}")
+            logger.error(f"TensorMemoryObj.tensor.size from tensor: {self.raw_data.numel() * self.raw_data.element_size()}")
             logger.error(f"TensorMemoryObj.tensor.physize: {self.get_physical_size()}")
             logger.error(f"TensorMemoryObj.meta.dtype: {self.meta.dtype}")
             logger.error(f"TensorMemoryObj.meta.shape: {self.meta.shape}")
