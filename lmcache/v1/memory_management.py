@@ -1084,9 +1084,11 @@ class PagedTensorMemoryAllocator(MemoryAllocatorInterface):
 
         if shape != self.shape:
             size_in_bytes = shape.numel() * self.bytes_per_element
-            logger.debug(
-                f"Resizing free block shape from {self.shape} to {shape} | size from {free_block.raw_data.numel()} to {size_in_bytes}"
-            )
+            if free_block.raw_data.numel() < size_in_bytes:
+                logger.error("can not resize from small to large")
+                logger.error(
+                    f"Resizing free block shape from {self.shape} to {shape} | size from {free_block.raw_data.numel()} to {size_in_bytes}"
+                )
             free_block.raw_data = free_block.raw_data[:size_in_bytes]
 
         # TODO (Jiayi): need a flag to drop these debug ops
@@ -1163,7 +1165,11 @@ class PagedTensorMemoryAllocator(MemoryAllocatorInterface):
         if memory_obj.meta.shape != self.shape:
             page_idx = memory_obj.meta.address
             memory_obj.raw_data = self.paged_buffers[page_idx]
-
+        if memory_obj.raw_data.numel() != self.paged_buffers[0].numel():
+            logger.error("Freeing memory with different size")
+            logger.error(f"Meta address: {memory_obj.meta.address}")
+            logger.error(f"Meta shape: {memory_obj.meta.shape}")
+            logger.error(f"Self shape: {self.shape}")
         self.free_blocks.append(memory_obj)
 
         # memory_obj.invalidate()
